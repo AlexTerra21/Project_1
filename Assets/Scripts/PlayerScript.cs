@@ -33,7 +33,8 @@ public class PlayerScript : MonoBehaviour
 	// Счетчик задержки между выстрелами
 	private float timeTilNextFire = 0.0f;
 
-
+	// Переменная для звука выстрела лазером
+	public AudioClip shootSound;
 
 
 	// Use this for initialization
@@ -130,6 +131,8 @@ public class PlayerScript : MonoBehaviour
 		float posY = this.transform.position.y + (Mathf.Sin ((transform.localEulerAngles.z - 90) * Mathf.Deg2Rad) * -laserDistance);
 		// Создаём лазер на этой позиции
 		Instantiate(laser, new Vector3(posX, posY, 0), this.transform.rotation);
+		// Воспроизвести звук выстрела лазером
+		GetComponent<AudioSource>().PlayOneShot(shootSound);
 	} 
 
 }

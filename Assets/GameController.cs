@@ -13,6 +13,14 @@ public class GameController : MonoBehaviour {
 	public int enemiesPerWave = 10;
 	private int currentNumberOfEnemies = 0;
 
+	// Переменные для вывода на экран
+	private int score = 0;
+	private int waveNumber = 0;
+
+	// Ссылки на текстовые объекты
+	public GUIText scoreText;
+	public GUIText waveText; 
+
 	// Use this for initialization
 	void Start () {
 		StartCoroutine (SpawnEnemies());
@@ -34,8 +42,11 @@ public class GameController : MonoBehaviour {
 			// Не создавать новых врагов, пока не уничтожены старые
 			if (currentNumberOfEnemies <= 0)
 			{
+				
 				float randDirection;
 				float randDistance;
+				waveNumber++;
+				waveText.text = "Волна: " + waveNumber; 
 				// Создать 10 врагов в случайных местах за экраном
 				for (int i = 0; i < enemiesPerWave; i++)
 				{
@@ -60,5 +71,11 @@ public class GameController : MonoBehaviour {
 	public void KilledEnemy()
 	{
 		currentNumberOfEnemies--;
+	}
+
+	public void IncreaseScore(int increase)
+	{
+		score += increase;
+		scoreText.text = "Очки: " + score;
 	}
 }
