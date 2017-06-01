@@ -15,9 +15,26 @@ public class PlayerScript : MonoBehaviour
 	public List<KeyCode> downButton;
 	public List<KeyCode> leftButton;
 	public List<KeyCode> rightButton;
+	// Кнопка, которая используется для выстрела
+	public List<KeyCode> shootButton;
 
 	// Сохранение последнего перемещения
 	private Vector3 lastMovement = new Vector3();
+
+	// Переменная для лазера
+	public Transform laser;
+
+	// Как далеко от центра корабля будет появлятся лазер
+	public float laserDistance = 0.2f;
+
+	// Задержка между выстрелами (кулдаун)
+	public float timeBetweenFires = 0.3f;
+
+	// Счетчик задержки между выстрелами
+	private float timeTilNextFire = 0.0f;
+
+
+
 
 	// Use this for initialization
 	void Start () 
@@ -32,6 +49,18 @@ public class PlayerScript : MonoBehaviour
 		Rotation();
 		// Перемещение героя
 		Movement();
+
+		foreach (KeyCode element in shootButton)
+		{
+			if(Input.GetKey(element) && timeTilNextFire < 0)
+			{
+				timeTilNextFire = timeBetweenFires;
+				ShootLaser();
+				break;
+			}
+		}
+		timeTilNextFire -= Time.deltaTime;
+
 	}
 
 	// Поворот героя к мышке
@@ -91,6 +120,16 @@ public class PlayerScript : MonoBehaviour
 		}
 		// Если кнопки не нажаты, то не двигаемся
 		return Vector3.zero;
+	} 
+
+	// Создание лазера
+	void ShootLaser()
+	{
+		// Высчитываем позицию корабля
+		float posX = this.transform.position.x + (Mathf.Cos ((transform.localEulerAngles.z - 90) * Mathf.Deg2Rad) * -laserDistance);
+		float posY = this.transform.position.y + (Mathf.Sin ((transform.localEulerAngles.z - 90) * Mathf.Deg2Rad) * -laserDistance);
+		// Создаём лазер на этой позиции
+		Instantiate(laser, new Vector3(posX, posY, 0), this.transform.rotation);
 	} 
 
 }
